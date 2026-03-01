@@ -1,31 +1,32 @@
 # GloBar Relocation
 
-An AI-powered relocation intelligence platform that ranks countries based on real-time data from multiple APIs. Enter any 3+ countries and get data-driven recommendations based on safety, air quality, climate, and population density — personalized to your risk tolerance and stay duration.
+A real-time relocation intelligence platform that ranks countries based on live data from multiple APIs. Enter any 3+ countries and get data-driven recommendations based on safety, air quality, climate, and population density — personalized to your risk tolerance and stay duration.
+
+### 🎬 [Watch Demo Video](https://drive.google.com/file/d/1RquS04ffVKkRq7nLcjvTiORvsPr1DCiu/view?usp=sharing)
 
 ---
 
 ## 🚀 Features
 
-- **Real-Time Country Analysis** — Fetches live data from 4 external APIs for every analysis request
+- **Real-Time Country Analysis** — Fetches live data from 3 external APIs for every analysis request
 - **Multi-Factor Scoring** — Evaluates countries across travel safety, health conditions, and environmental quality
 - **Dynamic Weight System** — Adjusts scoring weights based on user-selected risk tolerance and stay duration
 - **Smart Input Handling** — Supports country aliases (USA, UK, UAE), auto Title Case, deduplication, and input validation
 - **Data Quality Tracking** — Reports whether each data point came from a live API or a fallback source
 - **Graceful Degradation** — Individual API failures don't crash the analysis; fallback values keep results usable
-- **AI-Powered Insights** — Optional Google Gemini integration generates natural-language explanations for each ranking
 - **Modern React UI** — Dark-themed dashboard with score bars, metric chips, and ranked country cards
 
 ---
 
 ## 🛠 Tech Stack
 
-| Layer        | Technology                                                                |
-| ------------ | ------------------------------------------------------------------------- |
-| **Backend**  | Node.js, Express 5                                                        |
-| **Frontend** | React 18, Vite 5                                                          |
-| **APIs**     | REST Countries, OpenWeather (Weather + AQI), World Bank, Google Gemini AI |
-| **HTTP**     | Axios (backend), Fetch API (frontend)                                     |
-| **Tooling**  | dotenv, CORS, Vite dev proxy                                              |
+| Layer        | Technology                                              |
+| ------------ | ------------------------------------------------------- |
+| **Backend**  | Node.js, Express 5                                      |
+| **Frontend** | React 18, Vite 5                                        |
+| **APIs**     | REST Countries, OpenWeather (Weather + AQI), World Bank |
+| **HTTP**     | Axios (backend), Fetch API (frontend)                   |
+| **Tooling**  | dotenv, CORS, Vite dev proxy                            |
 
 ---
 
@@ -49,8 +50,7 @@ globar-relocation/
 │   │   │   ├── normalization.service.js # Converts raw values to 0-100 scale
 │   │   │   ├── scoring.service.js       # Computes travel, health, environment scores
 │   │   │   ├── weight.service.js        # Dynamic weight calculation per user preferences
-│   │   │   ├── ranking.service.js       # Sorts countries by final weighted score
-│   │   │   └── rag.services.js          # Google Gemini AI explanation layer
+│   │   │   └── ranking.service.js       # Sorts countries by final weighted score
 │   │   ├── middleware/                  # Error handling, logging, validation
 │   │   ├── test/                        # Individual service test scripts
 │   │   ├── app.js                       # Express app setup (CORS, routes)
@@ -81,7 +81,6 @@ globar-relocation/
 
 - **Node.js** v18+ and npm
 - An **OpenWeather API key** ([get one free](https://openweathermap.org/api))
-- _(Optional)_ A **Google Gemini API key** ([get one](https://aistudio.google.com/apikey)) for AI insights
 
 ### 1. Clone the Repository
 
@@ -108,7 +107,6 @@ Add your API keys to `backend/.env`:
 
 ```env
 OPENWEATHER_API_KEY=your_openweather_api_key
-GEMINI_API_KEY=your_gemini_api_key          # optional
 ```
 
 ### 4. Install Frontend Dependencies
@@ -147,14 +145,12 @@ Create a `.env` file inside the `backend/` folder:
 | Variable              | Description                              | Required |
 | --------------------- | ---------------------------------------- | -------- |
 | `OPENWEATHER_API_KEY` | OpenWeather API key (weather + AQI data) | Yes      |
-| `GEMINI_API_KEY`      | Google Gemini API key (AI explanations)  | No       |
 | `PORT`                | Backend server port (default: 5000)      | No       |
 
 **Example `.env`:**
 
 ```env
 OPENWEATHER_API_KEY=your_key_here
-GEMINI_API_KEY=your_key_here
 PORT=5000
 ```
 
@@ -260,7 +256,7 @@ curl "http://localhost:5000/analyze?countries=Japan,Germany,Australia&riskTolera
 
 ## 🔄 Data Pipeline
 
-The backend processes each request through a 6-stage pipeline:
+The backend processes each request through a 5-stage pipeline:
 
 ```
 Input → Aggregation → Normalization → Scoring → Weighting → Ranking → Response
@@ -268,12 +264,11 @@ Input → Aggregation → Normalization → Scoring → Weighting → Ranking �
 
 | Stage             | Description                                                            |
 | ----------------- | ---------------------------------------------------------------------- |
-| **Aggregation**   | Fetches data from 4 APIs per country with per-API fallbacks            |
+| **Aggregation**   | Fetches data from 3 APIs per country with per-API fallbacks            |
 | **Normalization** | Converts raw values (AQI 1-5, temp °C, population) to 0-100 scale      |
 | **Scoring**       | Computes travel, health, and environmental scores from normalized data |
 | **Weighting**     | Calculates dynamic weights based on risk tolerance and stay duration   |
 | **Ranking**       | Applies weights, computes final score, sorts best-to-worst             |
-| **AI Enrichment** | _(Optional)_ Generates Gemini AI explanations for each ranked country  |
 
 ---
 
